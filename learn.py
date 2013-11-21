@@ -1,3 +1,4 @@
+# encoding: utf-8
 '''
 Created on 21 Nov 2013
 
@@ -22,12 +23,13 @@ assert hello_world() == "Hello World"
 
 you = "Foo"
 assert hello_you(you) == "Hello %s" % you
-# assert beer_on_the_wall_lyrics(99) ==
+
 n = 5 
 lyrics = beer_on_the_wall_lyrics(n)
-for line in lyrics:
-    print line
-    
+# for line in lyrics:
+#     print line
 assert len(lyrics) == n
+
+
 
 print "\n===success==="
