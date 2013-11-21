@@ -1,4 +1,3 @@
-# encoding: utf-8
 '''
 Created on 21 Nov 2013
 
@@ -16,8 +15,36 @@ def beer_on_the_wall_lyrics(n):
     "Take one down, pass it around, %d bottles of beer on the wall..." % (i, i, i-1) for i in range(n,0,-1)]
     return lyrics
 
-def gematria():
-    pass
+def gematria(letter):
+    g = {
+         'a': 1,
+         'b': 2,
+         'c': 3,
+         'd': 4,
+         'e': 5,
+         'f': 6,
+         'g': 7,
+         'h': 8,
+         'i': 9,
+         'j': 10,
+         'k': 20,
+         'l': 30,
+         'm': 40,
+         'n': 50,
+         'o': 60,
+         'p': 70,
+         'q': 80,
+         'r': 90,
+         's': 100,
+         't': 200,
+         'u': 300,
+         'v': 400,
+         'w': 500,
+         'x': 600,
+         'y': 700,
+         'z': 800
+         }
+    return g[letter]
     
 assert hello_world() == "Hello World"
 
@@ -30,6 +57,7 @@ lyrics = beer_on_the_wall_lyrics(n)
 #     print line
 assert len(lyrics) == n
 
+assert gematria('v') == 400
 
 
 print "\n===success==="
