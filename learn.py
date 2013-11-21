@@ -45,12 +45,40 @@ def gematria(letter):
          'y': 700,
          'z': 800
          }
+
     return g[letter]
 
 def palindrome(word):
     word_without_punc = word.translate(None, string.punctuation)
     reverse = word_without_punc[::-1]
     return reverse == word_without_punc
+
+def multiplication_list(n):
+    return [[i*j for j in range(n+1)] for i in range(n+1)]
+
+def letter_count(word):
+    counts = {}
+    for letter in string.lowercase:
+        counts[letter] = word.count(letter) 
+    return counts
+
+def palindromes(sentence):
+    words = sentence.split()
+    return [word for word in words if palindrome(word)]
+
+def most_common_word(sentence):
+    words = sentence.split()
+    return max(words, key=words.count)
+    
+    # first attempt. works too
+#     count_dict = {}
+#     for word in words:
+#         if word in count_dict:
+#             count_dict[word] += 1
+#         else:
+#             count_dict[word] = 1
+#             
+#     return max(count_dict, key=count_dict.get)
 
 def main():
     
@@ -70,6 +98,17 @@ def main():
     assert palindrome('abcba')
     assert not palindrome('asdabbcba')
     assert palindrome('ab,c.ba')
+    
+    assert multiplication_list(12)[12][12] == 144
+    assert multiplication_list(88)[75][33] == 75*33
+    
+    assert letter_count('aaaba')['a'] == 4
+    assert letter_count('aaaba')['b'] == 1
+    assert letter_count('aaaba')['c'] == 0
+    
+    assert palindromes('qweewq adgsdhfg sdhjfg sfdjhgsfdh sdfhj abbba cdefedc') == ['qweewq', 'abbba', 'cdefedc']
+    
+    assert most_common_word('abc abc def def ghhh gghh def') == 'def'
 
     print "\n===success==="
 
