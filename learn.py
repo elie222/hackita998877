@@ -4,6 +4,7 @@ Created on 21 Nov 2013
 @author: Elie2
 '''
 import string
+from bottle import route, run, request
 
 def hello_world():
     return "Hello World"
@@ -80,6 +81,13 @@ def most_common_word(sentence):
 #             
 #     return max(count_dict, key=count_dict.get)
 
+def html_list(text, ordered):
+    lines = text.split('\n')
+    list_tag = 'ol'
+    if not ordered:
+        list_tag = 'ul'
+    return '<%s>\n%s\n</%s>' % (list_tag, "\n".join(["<li>%s</li>" % line for line in lines]), list_tag)
+
 def main():
     
     assert hello_world() == "Hello World"
@@ -109,9 +117,59 @@ def main():
     assert palindromes('qweewq adgsdhfg sdhjfg sfdjhgsfdh sdfhj abbba cdefedc') == ['qweewq', 'abbba', 'cdefedc']
     
     assert most_common_word('abc abc def def ghhh gghh def') == 'def'
+    
+#     print html_list('asdgjsfhg jsdhfg jhsdgf jhsdfg jsdhf\nsdfsdf\nsfdsg\nsdfsdf', True)
+#     print html_list('asdgjsfhg jsdhfg jhsdgf jhsdfg jsdhf\nsdfsdf\nsfdsg\nsdfsdf', False)
 
-    print "\n===success==="
+    print '===success==='
 
+# main()
 
+@route('/listomator')
+def listomator():
+    if request.query:
+#         print request.query.text
+#         print request.query.ordered
+        return html_list(request.query.text, (request.query.ordered == 'ordered'))
+    
+    return """
+        <form>
+            <textarea name="text">Enter text here...</textarea><br>
+            <input type="checkbox" name="ordered" value="ordered">Display as ordered list<br>
+            <input type="submit">
+        </form>
+    """
+    
+@route('/mult_table')
+def mult_table():
+    if request.query:
+        table = multiplication_list(int(request.query.n))
+#         return '<table>%s</table>' % '\n'.join([' '.join([table[row][col] for col in table[row]]) for row in table])
+        return '<table border=1>%s</table>' % "\n".join(["<tr>%s</tr>" % "".join(["<td>%d</td>" % cell for cell in row]) for row in table])
+    
+    return """
+        <form>
+            <input type="text" name="n" placeholder="Enter a number"><br>
+            <input type="submit">
+        </form>
+    """
+    
+@route('/countries')
+def countries():
+    f = open('cow.txt', 'r')
+    html = ''
+    
+    for line in f:
+        if not line.strip()[0] == '#' and len(line.split('; ')) > 1:
+            country_name = line.split('; ')[4]
+            html += '<a href="/country/%s">%s<br>' % (country_name, country_name)
+    f.close()
+    
+    return html
 
-main()
+@route('/country/<name>')
+def country(name):
+    return '<h1>Country page: %s</h1>' % name
+
+run(host='localhost', port=8080, debug=True, reloader=True)
+
